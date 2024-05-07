@@ -15,35 +15,40 @@ function App(){
   const [mySearch, setMySearch] = useState('');
   const [myRecipes, setMyRecipes] = useState([]);
   const [wordSubmitted, setWordSubmitted] = useState('bread');
-  const [stateLoader, setStateLoader] = useState(true);
+  const [stateLoader, setStateLoader] = useState(false);
 
   
   
     const getNewRecipe = useCallback(async () => {
+      setStateLoader(true)
+
       const responce = await fetch(`https://api.edamam.com/api/recipes/v2?type=public&q=${wordSubmitted}&app_id=${MY_ID}&app_key=${MY_KEY}`);
+
+          if(responce.ok) {
+          setStateLoader(false);
       const data = await responce.json();
       setMyRecipes(data.hits);
-      setStateLoader(false)
+      }   else{
+         setStateLoader(false)
+         alert('Type an ingredient')
+    }
     },[wordSubmitted])
-    useEffect(() =>{
-        // if(wordSubmitted !== ''){
-        //   alert('Enter an item')
-        // } else{
-        //   getNewRecipe();
-        // }
-         getNewRecipe();
-      }, [getNewRecipe])
+    // useEffect(() =>{
+      getNewRecipe();
+    //   }, [getNewRecipe])
 
-    // useEffect(() => {
-    //   const timer = setTimeout(() => setStateLoader(false, 3000));
-    //      return() => clearTimeout(timer)
-    // }, [])
-                                                                       
+    useEffect(() => {
+      
+      if (wordSubmitted !== '') {
+        let ingr = wordSubmitted.split(/[,,;,\n,\r]/);
+        getNewRecipe(ingr);
+      }
+    }, [wordSubmitted])
 
-const myRecipeSearch = (e) => {
+  
+  const myRecipeSearch = (e) => {
   setMySearch(e.target.value);
 }
-
 const finalSearch = (e) => {
   e.preventDefault();
   setWordSubmitted(mySearch);
