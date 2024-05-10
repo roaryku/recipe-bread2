@@ -58,3 +58,19 @@ body{
   }
 }
 
+@media all and (max-width: 800px){
+  .lds-facebook div {
+    left: 230px;
+  }
+  .lds-facebook div:nth-child(1) {
+    left: 230px;
+  }
+  .lds-facebook div:nth-child(2) {
+    left: 170px;
+  }
+  .lds-facebook div:nth-child(3) {
+    left: 200px;
+  }
+}
+
+

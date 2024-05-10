@@ -6,6 +6,7 @@ import video from './bread.mp4';
 import icon from './icons8.png'
 import MyRecipesComponent from './MyRecipesComponent';
 import { LoaderPage } from './LoaderPage';
+import Swal from 'sweetalert2';
 
 function App(){
 
@@ -21,29 +22,14 @@ function App(){
   
     const getNewRecipe = useCallback(async () => {
       setStateLoader(true)
-
       const responce = await fetch(`https://api.edamam.com/api/recipes/v2?type=public&q=${wordSubmitted}&app_id=${MY_ID}&app_key=${MY_KEY}`);
-
-          if(responce.ok) {
-          setStateLoader(false);
       const data = await responce.json();
       setMyRecipes(data.hits);
-      }   else{
-         setStateLoader(false)
-         alert('Type an ingredient')
-    }
+      setStateLoader(false)
     },[wordSubmitted])
-    // useEffect(() =>{
+    useEffect(() =>{
       getNewRecipe();
-    //   }, [getNewRecipe])
-
-    useEffect(() => {
-      
-      if (wordSubmitted !== '') {
-        let ingr = wordSubmitted.split(/[,,;,\n,\r]/);
-        getNewRecipe(ingr);
-      }
-    }, [wordSubmitted])
+      }, [getNewRecipe])
 
   
   const myRecipeSearch = (e) => {
@@ -52,6 +38,13 @@ function App(){
 const finalSearch = (e) => {
   e.preventDefault();
   setWordSubmitted(mySearch);
+}
+
+const handleClick = () => {
+  if(!mySearch) {
+    setStateLoader(false);
+    Swal.fire("Please enter your ingredients!")
+  }
 }
 
   return(
@@ -71,7 +64,7 @@ const finalSearch = (e) => {
           <input className='search' placeholder='search...' onChange={myRecipeSearch} value={mySearch}></input>
 
         <div className='container'>
-          <button className='btn'>
+          <button className='btn' onClick={handleClick}>
             <img src={icon} width="35px" className='icons' alt='baking'/>
           </button>
           </div>
