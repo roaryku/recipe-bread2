@@ -45,6 +45,11 @@ const handleClick = () => {
     setStateLoader(false);
     Swal.fire("Please enter your ingredients!")
   }
+  else if(!wordSubmitted){
+    setStateLoader(false);
+    Swal.fire("Ingredients entered incorectly")
+    return false
+  }
 }
 
   return(
@@ -61,7 +66,7 @@ const handleClick = () => {
       
       <div className='container heading'>
         <form onSubmit = {finalSearch}>
-          <input className='search' placeholder='search...' onChange={myRecipeSearch} value={mySearch}></input>
+          <input className='search' type='text' placeholder='search...' onChange={myRecipeSearch} value={mySearch}></input>
 
         <div className='container'>
           <button className='btn' onClick={handleClick}>
